@@ -1,0 +1,154 @@
+/* ----------------------------------------- */
+/* Item Card Structure                       */
+/* ----------------------------------------- */
+
+.pf2e.chat-card {
+    display: flex;
+    flex-direction: column;
+    font-family: var(--sans-serif);
+    gap: var(--space-3);
+
+    h2,
+    h3,
+    h4 {
+        font-weight: 600;
+    }
+
+    .card-header {
+        padding: var(--space-2) 0;
+        border-top: var(--space-2) groove var(--color-text-light-0);
+        align-items: center;
+        min-height: 2.125rem;
+
+        img {
+            flex: 0 0 1.75rem;
+            margin-right: var(--space-4);
+            height: 1.75rem;
+            width: 1.75rem;
+        }
+
+        h3 {
+            border-bottom: none;
+            flex: 1;
+            margin: 0;
+            font-size: var(--font-size-16);
+        }
+
+        h4 {
+            flex: 0;
+            margin: 0 0.5em 0 0;
+            white-space: nowrap;
+
+            &.level,
+            &.rank {
+                margin-left: auto;
+            }
+        }
+    }
+
+    .tags {
+        border-bottom: var(--space-2) groove var(--color-text-light-0);
+        margin: 0;
+        padding: 0 0 var(--space-4) 0;
+    }
+
+    .card-content {
+        margin: 0;
+
+        p {
+            margin: var(--space-4) 0;
+            min-height: unset;
+
+            &.item-block-line {
+                --wrap-indent: var(--space-14);
+                line-height: 1.25rem;
+                margin: 0;
+                padding: 0 0 0 var(--wrap-indent);
+                text-indent: calc(-1 * var(--wrap-indent));
+
+                .adjusted {
+                    text-decoration: underline dotted 1px black;
+                }
+
+                &:first-child {
+                    margin-top: var(--space-1);
+                }
+            }
+        }
+
+        hr.item-block-divider {
+            margin-top: var(--space-3);
+        }
+    }
+
+    .card-buttons {
+        display: flex;
+        flex-basis: 100%;
+        flex-direction: column;
+        margin: var(--space-4) 0;
+
+        button {
+            margin: var(--space-2) 0;
+
+            span {
+                border: none;
+            }
+        }
+
+        .owner-buttons {
+            display: flex;
+            flex-basis: 100%;
+            flex-direction: column;
+        }
+
+        .spell-attack-buttons,
+        .spell-button {
+            display: flex;
+            flex-direction: row;
+
+            * {
+                flex-grow: 1;
+                flex-basis: 0;
+            }
+
+            :first-child {
+                flex-grow: 2;
+            }
+        }
+
+        .spell-button button.small {
+            flex-grow: 0;
+
+            > i {
+                margin-right: 0;
+            }
+        }
+
+        // Conditionally added based on visibility
+        .hidden-to-others {
+            background: var(--visibility-gm-bg);
+        }
+    }
+
+    footer {
+        padding: var(--space-3) 0 0;
+        border-top: var(--space-2) groove var(--color-text-light-0);
+
+        span {
+            border-right: var(--space-2) groove var(--color-text-light-0);
+            padding: 0 var(--space-4) 0 0;
+            font-size: var(--font-size-12);
+
+            &:last-child {
+                border-right: none;
+                padding-right: 0;
+            }
+        }
+    }
+
+    .card-buttons-two-column {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-column-gap: var(--space-4);
+    }
+}

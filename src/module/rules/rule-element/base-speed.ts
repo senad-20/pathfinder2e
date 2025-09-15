@@ -1,0 +1,78 @@
+import type { ActorType, CreaturePF2e } from "@actor";
+import type { MovementType } from "@actor/types.ts";
+import { MOVEMENT_TYPES } from "@actor/values.ts";
+import { tupleHasValue } from "@util";
+import type { BaseSpeedSynthetic, DeferredMovementType } from "../synthetics.ts";
+import { RuleElementOptions, RuleElementPF2e } from "./base.ts";
+import { ModelPropsFromRESchema, ResolvableValueField, RuleElementSchema, RuleElementSource } from "./data.ts";
+import fields = foundry.data.fields;
+
+/**
+ * @category RuleElement
+ */
+class BaseSpeedRuleElement extends RuleElementPF2e<BaseSpeedRuleSchema> {
+    protected static override validActorTypes: ActorType[] = ["character", "familiar", "npc"];
+
+    constructor(data: RuleElementSource, options: RuleElementOptions) {
+        super(data, options);
+        if (this.invalid) return;
+
+        this.selector = this.selector.trim().replace(/-speed$/, "");
+
+        if (!(typeof this.value === "string" || typeof this.value === "number" || this.isBracketedValue(this.value))) {
+            this.failValidation("A value must be a number, string, or bracketed value");
+        }
+    }
+
+    static override defineSchema(): BaseSpeedRuleSchema {
+        return {
+            ...super.defineSchema(),
+            selector: new fields.StringField({ required: true, blank: false, initial: undefined }),
+            value: new ResolvableValueField({ required: true, nullable: false, initial: undefined }),
+        };
+    }
+
+    override beforePrepareData(): void {
+        if (this.ignored) return;
+        const speedType = this.resolveInjectedProperties(this.selector);
+        if (!tupleHasValue(MOVEMENT_TYPES, speedType)) {
+            return this.failValidation("Unrecognized or missing selector");
+        }
+
+        const speed = this.#createMovementType(speedType);
+        const synthetics = (this.actor.synthetics.movementTypes[speedType] ??= []);
+        synthetics.push(speed);
+    }
+
+    #createMovementType(type: MovementType): DeferredMovementType {
+        return (): BaseSpeedSynthetic | null => {
+            if (!this.test()) return null;
+
+            const value = Math.trunc(Number(this.resolveValue(this.value)));
+            if (!Number.isInteger(value)) {
+                this.failValidation("Failed to resolve value");
+                return null;
+            }
+            // Whether this speed is derived from the creature's land speed
+            const derivedFromLand =
+                type !== "land" &&
+                typeof this.value === "string" &&
+                /attributes\.speed\.(?:value|total)/.test(this.value);
+
+            return value > 0 ? { type: type, value, source: this.item.name, derivedFromLand } : null;
+        };
+    }
+}
+
+interface BaseSpeedRuleElement
+    extends RuleElementPF2e<BaseSpeedRuleSchema>,
+        ModelPropsFromRESchema<BaseSpeedRuleSchema> {
+    get actor(): CreaturePF2e;
+}
+
+type BaseSpeedRuleSchema = RuleElementSchema & {
+    selector: fields.StringField<string, string, true, false, false>;
+    value: ResolvableValueField<true, false, true>;
+};
+
+export { BaseSpeedRuleElement };

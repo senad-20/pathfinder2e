@@ -1,0 +1,18 @@
+.flavor-text {
+    .reroll-indicator {
+        float: right;
+    }
+}
+
+.message-content {
+    .reroll-discard {
+        .dice-total,
+        .dice-tooltip {
+            opacity: 0.3;
+        }
+    }
+
+    .reroll-second .dice-formula {
+        display: none;
+    }
+}
