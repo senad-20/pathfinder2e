@@ -7,7 +7,7 @@
     "compatibility": {
         "minimum": "13.334",
         "verified": "13.334",
-        "maximum": "12"
+        "maximum": "13"
     },
     "authors": [
         {
@@ -1372,6 +1372,6 @@
     "url": "https://github.com/foundryvtt/pf2e",
     "bugs": "https://github.com/foundryvtt/pf2e/issues",
     "changelog": "https://github.com/foundryvtt/pf2e/blob/release/CHANGELOG.md",
-    "manifest": "https://github.com/foundryvtt/pf2e/releases/tag/7.1.0/download/system.json",
+    "manifest": "https://github.com/senad-20/pathfinder2e/blob/main/static/system.json",
     "download": "https://github.com/foundryvtt/pf2e/releases/tag/7.1.0/download/pf2e.zip"
 }
